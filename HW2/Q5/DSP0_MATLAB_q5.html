@@ -1,0 +1,172 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>Digital Signal Processing MATLAB HW2 - q5</title><meta name="generator" content="MATLAB 9.1"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2021-12-21"><meta name="DC.source" content="DSP0_MATLAB_q5.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h1>Digital Signal Processing MATLAB HW2 - q5</h1><p>Professor: Dr. Sheikhzadeh Author: Amir Hossein Daraie - 9723710 E-mail: <a href="mailto:daraieamirh@gmail.com">daraieamirh@gmail.com</a> University: Amirkabir University of Technology</p><pre class="codeinput">clc;clear;close <span class="string">all</span>;
+
+analysis_filters = xlsread(<span class="string">'filters.xls'</span>,1); <span class="comment">% sheet 1</span>
+synthesis_filters = xlsread(<span class="string">'filters.xls'</span>,2); <span class="comment">% sheet 2</span>
+
+t = 0: 1/(2*pi): 60;
+x1 = cos(2*pi/16*pi*t);
+x2 = cos(2*5*pi/16*pi*t);
+x3 = cos(2*9*pi/16*pi*t);
+x4 = cos(2*13*pi/16*pi*t);
+x = x1 + x2 + x3 + x4;
+
+amplifier_coeffs = [2 0 1 0.5];
+
+<span class="comment">% filter the input with the analysis filter</span>
+var1 = filter(analysis_filters(1,:),1,x);
+var2 = downsample(var1,4); var3 = var2 * amplifier_coeffs(1); var4 = upsample(var3,4);
+var5 = filter(synthesis_filters(1,:),1,var4);
+subband(1,:) = var5;
+var1 = filter(analysis_filters(2,:),1,x);
+var2 = downsample(var1,4); var3 = var2 * amplifier_coeffs(2); var4 = upsample(var3,4);
+var5 = filter(synthesis_filters(2,:),1,var4);
+subband(2,:) = var5;
+var1 = filter(analysis_filters(3,:),1,x);
+var2 = downsample(var1,4); var3 = var2 * amplifier_coeffs(3); var4 = upsample(var3,4);
+var5 = filter(synthesis_filters(3,:),1,var4);
+subband(3,:) = var5;
+var1 = filter(analysis_filters(4,:),1,x);
+var2 = downsample(var1,4); var3 = var2 * amplifier_coeffs(4); var4 = upsample(var3,4);
+var5 = filter(synthesis_filters(4,:),1,var4);
+subband(4,:) = var5;
+
+sig_res = sum(subband);
+
+n = 512;
+fs = 2*pi;
+freq = linspace(-fs/2, fs/2, n);
+
+X = fftshift(fft(x,n));
+SIG_RES = fftshift(fft(sig_res, n));
+plot(freq, abs(X), <span class="string">'b'</span>)
+hold <span class="string">on</span>
+plot(freq, abs(SIG_RES), <span class="string">'r'</span>)
+legend(<span class="string">'input signal'</span>,<span class="string">'output signal'</span>)
+xlim([0 pi])
+xlabel(<span class="string">'Normalized frequency'</span>)
+ylabel(<span class="string">'Magnitude'</span>)
+</pre><img vspace="5" hspace="5" src="DSP0_MATLAB_q5_01.png" style="width:710px;height:571px;" alt=""> <p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2016b</a><br></p></div><!--
+##### SOURCE BEGIN #####
+%% Digital Signal Processing MATLAB HW2 - q5
+% Professor: Dr. Sheikhzadeh
+% Author: Amir Hossein Daraie - 9723710
+% E-mail: daraieamirh@gmail.com
+% University: Amirkabir University of Technology
+
+clc;clear;close all;
+
+analysis_filters = xlsread('filters.xls',1); % sheet 1
+synthesis_filters = xlsread('filters.xls',2); % sheet 2
+
+t = 0: 1/(2*pi): 60;
+x1 = cos(2*pi/16*pi*t);
+x2 = cos(2*5*pi/16*pi*t);
+x3 = cos(2*9*pi/16*pi*t);
+x4 = cos(2*13*pi/16*pi*t);
+x = x1 + x2 + x3 + x4;
+
+amplifier_coeffs = [2 0 1 0.5];
+
+% filter the input with the analysis filter 
+var1 = filter(analysis_filters(1,:),1,x);
+var2 = downsample(var1,4); var3 = var2 * amplifier_coeffs(1); var4 = upsample(var3,4);
+var5 = filter(synthesis_filters(1,:),1,var4);
+subband(1,:) = var5;
+var1 = filter(analysis_filters(2,:),1,x);
+var2 = downsample(var1,4); var3 = var2 * amplifier_coeffs(2); var4 = upsample(var3,4);
+var5 = filter(synthesis_filters(2,:),1,var4);
+subband(2,:) = var5;
+var1 = filter(analysis_filters(3,:),1,x);
+var2 = downsample(var1,4); var3 = var2 * amplifier_coeffs(3); var4 = upsample(var3,4);
+var5 = filter(synthesis_filters(3,:),1,var4);
+subband(3,:) = var5;
+var1 = filter(analysis_filters(4,:),1,x);
+var2 = downsample(var1,4); var3 = var2 * amplifier_coeffs(4); var4 = upsample(var3,4);
+var5 = filter(synthesis_filters(4,:),1,var4);
+subband(4,:) = var5;
+
+sig_res = sum(subband);
+
+n = 512;
+fs = 2*pi;
+freq = linspace(-fs/2, fs/2, n);
+
+X = fftshift(fft(x,n));
+SIG_RES = fftshift(fft(sig_res, n));
+plot(freq, abs(X), 'b')
+hold on 
+plot(freq, abs(SIG_RES), 'r')
+legend('input signal','output signal')
+xlim([0 pi])
+xlabel('Normalized frequency')
+ylabel('Magnitude')
+##### SOURCE END #####
+--></body></html>

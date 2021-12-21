@@ -1,0 +1,331 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>DSP0_MATLAB_q1</title><meta name="generator" content="MATLAB 9.1"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2021-12-21"><meta name="DC.source" content="DSP0_MATLAB_q1.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h2>Contents</h2><div><ul><li><a href="#2">A. Sampling</a></li><li><a href="#3">B. Interpolation</a></li><li><a href="#4">B 1. Linear Interpolation</a></li><li><a href="#5">B 2. Sinc Interpolation</a></li></ul></div><pre class="codeinput">close <span class="string">all</span>
+clc
+clear <span class="string">all</span>
+</pre><h2 id="2">A. Sampling</h2><pre class="codeinput"><span class="comment">% Write a MATLAB program to Plot following Signals, where f = 10hz and the Time interval is [0,0.2]:(Hint: Use sawtooth Command)</span>
+
+<span class="comment">% y=sin(2*pi*f*t)+cos(4*pi*f*t)</span>
+f=10; <span class="comment">%Hz</span>
+sr0 = 1000;
+t=0:1/sr0:0.2;
+y=sin(2*pi*f*t)+cos(4*pi*f*t);
+plot(t,y)
+
+<span class="comment">% y=sawtooth(2*pi*f*t)</span>
+y2=sawtooth(2*pi*f*t);
+figure
+plot(t,y2)
+
+<span class="comment">% Sample These Signals with Sampling Frequency 100Hz and discuss about the boundrys of Sampling Frequency in your Report.</span>
+sr = 100; <span class="comment">%hz</span>
+dt = 1/sr;
+t1=0:dt:0.2;
+y3=resample(y,sr,sr0);
+figure
+plot(t1,y3)
+
+y4=resample(y2,sr,sr0);
+figure
+plot(t1,y4)
+</pre><img vspace="5" hspace="5" src="DSP0_MATLAB_q1_01.png" style="width:710px;height:571px;" alt=""> <img vspace="5" hspace="5" src="DSP0_MATLAB_q1_02.png" style="width:710px;height:571px;" alt=""> <img vspace="5" hspace="5" src="DSP0_MATLAB_q1_03.png" style="width:710px;height:571px;" alt=""> <img vspace="5" hspace="5" src="DSP0_MATLAB_q1_04.png" style="width:710px;height:571px;" alt=""> <h2 id="3">B. Interpolation</h2><pre class="codeinput"><span class="comment">% A reconstruction filter on the output of a sampled data system.</span>
+<span class="comment">% Provided the signal was sampled at a rate greater than twice the highest frequency present in the original,</span>
+<span class="comment">% the output of a reconstruction filter will be identical to the original signal.</span>
+</pre><h2 id="4">B 1. Linear Interpolation</h2><pre class="codeinput"><span class="comment">% In Linear interpolation, the samples are simply connected to each other with strict line.</span>
+<span class="comment">% Write a MATLAB program to compute Linear Interpolated Signals:(Hint: interp1 Command).</span>
+<span class="comment">% ts is interval with step of inv(fs). for this part consider inv(2fs) as the step of tnew and plot ynew and compare it with ys.</span>
+
+<span class="comment">%  ynew = interp1(ts,ys,tnew,"linear")</span>
+
+<span class="comment">% the plot function of MATLAB also uses Linear Interpolation.</span>
+<span class="comment">% plot(ts,ys) will connect ys samples with strict line.</span>
+<span class="comment">% interp1 can be used for sampling too and Assigns signals values to the new timeline.</span>
+<span class="comment">% use following command for sampling signal with fs:(similar to Q1.A)</span>
+
+<span class="comment">% where ts is time interval with inv(fs) as step.</span>
+
+
+fc = 10000; Tc = inv(fc); t = 0:Tc:0.2;
+y = sin(2*pi*10*t);
+
+fs = 100; Ts = inv(fs); ts = 0:Ts:0.2;
+
+ys2 = sin(2*pi*10*ts);
+ys1 = interp1(t,y,ts,<span class="string">'linear'</span>);
+
+figure
+plot(t,y)
+figure
+plot(ts,ys2)
+hold <span class="string">on</span>
+plot(ts,ys1)
+legend(<span class="string">'sin(2*pi*10*ts)'</span>,<span class="string">'interp1(t,y,ts,linear)'</span>)
+
+<span class="comment">% ys1 = ys2</span>
+</pre><img vspace="5" hspace="5" src="DSP0_MATLAB_q1_05.png" style="width:710px;height:571px;" alt=""> <img vspace="5" hspace="5" src="DSP0_MATLAB_q1_06.png" style="width:710px;height:571px;" alt=""> <h2 id="5">B 2. Sinc Interpolation</h2><pre class="codeinput"><span class="comment">% Write a MATLAB program to compute Reconstructed Signals Obtained From sinc interpolation.(Reconstruct ys. Q1 folder clip)</span>
+
+<span class="comment">% Create "continuous time" signal, Fc &gt;&gt; f</span>
+Fc = 1e4; Tc = 1/Fc;
+t = 0:Tc:0.2;
+f = 10;
+x_cont = sin(2*pi*f*t);
+
+<span class="keyword">for</span> Fs = [2,5,10,20,40,60,80]
+
+    disp(Fs)
+
+    Ts = 1/Fs;
+    ratio = round(Ts/Tc);
+    t_sampled = t(1:ratio:end);
+    x_sampled = x_cont(1:ratio:end);
+
+    figure
+    plot(t, x_cont)
+    hold <span class="string">on</span>
+    stem(t_sampled, x_sampled, <span class="string">'o'</span>)
+    legend(<span class="string">'Continuous time signal (f = 40 Hz)'</span>, [<span class="string">'Sampled signal Fs = '</span> int2str(Fs)])
+
+    <span class="comment">% Create and plot sinc train</span>
+    sincTrain = zeros(length(t), length(x_sampled));
+    figure; grid <span class="string">on</span>; hold <span class="string">on</span>
+    plot(t, x_cont, <span class="string">'k'</span>, <span class="string">'LineWidth'</span>, 1)
+    xlabel(<span class="string">'t'</span>); ylabel(<span class="string">'Amplitude'</span>)
+    title([<span class="string">'Fs = '</span> int2str(Fs) <span class="string">' (f = '</span> int2str(f) <span class="string">' Hz)'</span>])
+
+    <span class="keyword">try</span>
+        idx = 1;
+        <span class="keyword">for</span> n = -floor(length(x_sampled)/2):floor(length(x_sampled)/2)
+           sincTrain(:, idx) = x_sampled(idx)*sinc((t - n*Ts)/Ts);
+           p = plot(t, sincTrain(:, idx));
+           stem(t_sampled(idx), x_sampled(idx))
+           idx = idx + 1;
+           pause(0.5);
+        <span class="keyword">end</span>
+    <span class="keyword">catch</span>
+    <span class="keyword">end</span>
+
+    x_reconst = sum(sincTrain, 2);
+    err = (x_cont' - x_reconst).^2;
+    figure
+    hold <span class="string">on</span>
+    grid <span class="string">on</span>
+    plot(t, x_cont)
+    plot(t, x_reconst)
+    plot(t, err)
+    legend(<span class="string">'x cont'</span>,<span class="string">'x reconst'</span>,<span class="string">'err'</span>)
+
+<span class="keyword">end</span>
+</pre><pre class="codeoutput">     2
+
+     5
+
+    10
+
+    20
+
+    40
+
+    60
+
+    80
+
+</pre><img vspace="5" hspace="5" src="DSP0_MATLAB_q1_07.png" style="width:710px;height:571px;" alt=""> <img vspace="5" hspace="5" src="DSP0_MATLAB_q1_08.png" style="width:710px;height:571px;" alt=""> <img vspace="5" hspace="5" src="DSP0_MATLAB_q1_09.png" style="width:710px;height:571px;" alt=""> <img vspace="5" hspace="5" src="DSP0_MATLAB_q1_10.png" style="width:710px;height:571px;" alt=""> <img vspace="5" hspace="5" src="DSP0_MATLAB_q1_11.png" style="width:710px;height:571px;" alt=""> <img vspace="5" hspace="5" src="DSP0_MATLAB_q1_12.png" style="width:710px;height:571px;" alt=""> <img vspace="5" hspace="5" src="DSP0_MATLAB_q1_13.png" style="width:710px;height:571px;" alt=""> <img vspace="5" hspace="5" src="DSP0_MATLAB_q1_14.png" style="width:710px;height:571px;" alt=""> <img vspace="5" hspace="5" src="DSP0_MATLAB_q1_15.png" style="width:710px;height:571px;" alt=""> <img vspace="5" hspace="5" src="DSP0_MATLAB_q1_16.png" style="width:710px;height:571px;" alt=""> <img vspace="5" hspace="5" src="DSP0_MATLAB_q1_17.png" style="width:710px;height:571px;" alt=""> <img vspace="5" hspace="5" src="DSP0_MATLAB_q1_18.png" style="width:710px;height:571px;" alt=""> <img vspace="5" hspace="5" src="DSP0_MATLAB_q1_19.png" style="width:710px;height:571px;" alt=""> <img vspace="5" hspace="5" src="DSP0_MATLAB_q1_20.png" style="width:710px;height:571px;" alt=""> <img vspace="5" hspace="5" src="DSP0_MATLAB_q1_21.png" style="width:710px;height:571px;" alt=""> <img vspace="5" hspace="5" src="DSP0_MATLAB_q1_22.png" style="width:710px;height:571px;" alt=""> <img vspace="5" hspace="5" src="DSP0_MATLAB_q1_23.png" style="width:710px;height:571px;" alt=""> <img vspace="5" hspace="5" src="DSP0_MATLAB_q1_24.png" style="width:710px;height:571px;" alt=""> <img vspace="5" hspace="5" src="DSP0_MATLAB_q1_25.png" style="width:710px;height:571px;" alt=""> <img vspace="5" hspace="5" src="DSP0_MATLAB_q1_26.png" style="width:710px;height:571px;" alt=""> <img vspace="5" hspace="5" src="DSP0_MATLAB_q1_27.png" style="width:710px;height:571px;" alt=""> <p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2016b</a><br></p></div><!--
+##### SOURCE BEGIN #####
+close all
+clc
+clear all
+
+%% A. Sampling
+
+% Write a MATLAB program to Plot following Signals, where f = 10hz and the Time interval is [0,0.2]:(Hint: Use sawtooth Command)
+
+% y=sin(2*pi*f*t)+cos(4*pi*f*t)
+f=10; %Hz
+sr0 = 1000;
+t=0:1/sr0:0.2;
+y=sin(2*pi*f*t)+cos(4*pi*f*t);
+plot(t,y)
+
+% y=sawtooth(2*pi*f*t)
+y2=sawtooth(2*pi*f*t);
+figure
+plot(t,y2)
+
+% Sample These Signals with Sampling Frequency 100Hz and discuss about the boundrys of Sampling Frequency in your Report.
+sr = 100; %hz
+dt = 1/sr; 
+t1=0:dt:0.2;
+y3=resample(y,sr,sr0);
+figure
+plot(t1,y3)
+
+y4=resample(y2,sr,sr0);
+figure
+plot(t1,y4)
+
+%% B. Interpolation
+
+% A reconstruction filter on the output of a sampled data system. 
+% Provided the signal was sampled at a rate greater than twice the highest frequency present in the original, 
+% the output of a reconstruction filter will be identical to the original signal.
+
+%% B 1. Linear Interpolation
+
+% In Linear interpolation, the samples are simply connected to each other with strict line. 
+% Write a MATLAB program to compute Linear Interpolated Signals:(Hint: interp1 Command). 
+% ts is interval with step of inv(fs). for this part consider inv(2fs) as the step of tnew and plot ynew and compare it with ys.
+
+%  ynew = interp1(ts,ys,tnew,"linear")
+
+% the plot function of MATLAB also uses Linear Interpolation. 
+% plot(ts,ys) will connect ys samples with strict line. 
+% interp1 can be used for sampling too and Assigns signals values to the new timeline. 
+% use following command for sampling signal with fs:(similar to Q1.A)
+
+% where ts is time interval with inv(fs) as step.
+
+
+fc = 10000; Tc = inv(fc); t = 0:Tc:0.2;
+y = sin(2*pi*10*t);
+
+fs = 100; Ts = inv(fs); ts = 0:Ts:0.2;
+
+ys2 = sin(2*pi*10*ts);
+ys1 = interp1(t,y,ts,'linear');
+
+figure
+plot(t,y)
+figure
+plot(ts,ys2)
+hold on
+plot(ts,ys1)
+legend('sin(2*pi*10*ts)','interp1(t,y,ts,linear)')
+
+% ys1 = ys2
+
+%% B 2. Sinc Interpolation
+
+% Write a MATLAB program to compute Reconstructed Signals Obtained From sinc interpolation.(Reconstruct ys. Q1 folder clip)
+
+% Create "continuous time" signal, Fc >> f
+Fc = 1e4; Tc = 1/Fc; 
+t = 0:Tc:0.2;
+f = 10; 
+x_cont = sin(2*pi*f*t); 
+
+for Fs = [2,5,10,20,40,60,80]
+
+    disp(Fs)
+    
+    Ts = 1/Fs; 
+    ratio = round(Ts/Tc);
+    t_sampled = t(1:ratio:end); 
+    x_sampled = x_cont(1:ratio:end); 
+
+    figure
+    plot(t, x_cont)
+    hold on
+    stem(t_sampled, x_sampled, 'o')
+    legend('Continuous time signal (f = 40 Hz)', ['Sampled signal Fs = ' int2str(Fs)])
+
+    % Create and plot sinc train
+    sincTrain = zeros(length(t), length(x_sampled));
+    figure; grid on; hold on
+    plot(t, x_cont, 'k', 'LineWidth', 1)
+    xlabel('t'); ylabel('Amplitude')
+    title(['Fs = ' int2str(Fs) ' (f = ' int2str(f) ' Hz)'])
+
+    try
+        idx = 1;
+        for n = -floor(length(x_sampled)/2):floor(length(x_sampled)/2)
+           sincTrain(:, idx) = x_sampled(idx)*sinc((t - n*Ts)/Ts);
+           p = plot(t, sincTrain(:, idx));
+           stem(t_sampled(idx), x_sampled(idx))
+           idx = idx + 1;
+           pause(0.5);
+        end
+    catch
+    end
+
+    x_reconst = sum(sincTrain, 2);
+    err = (x_cont' - x_reconst).^2;
+    figure
+    hold on
+    grid on
+    plot(t, x_cont)
+    plot(t, x_reconst)
+    plot(t, err)
+    legend('x cont','x reconst','err')
+    
+end
+
+
+
+##### SOURCE END #####
+--></body></html>
